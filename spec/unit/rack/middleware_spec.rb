@@ -27,6 +27,17 @@ RSpec.describe Airbrake::Rack::Middleware do
     stub_request(:post, endpoint).to_return(status: 201, body: '{}')
   end
 
+  describe ".for" do
+    it "returns a middleware class" do
+      middleware_class = described_class.for(:bingo)
+
+      expect(middleware_class).to be_a(Class)
+
+      instance = middleware_class.new(proc { |env| [200, env, 'Bongo!'] })
+      expect(instance.inspect).to eq('<class:Airbrake::Rack::Middleware {for: :bingo}>')
+    end
+  end
+
   describe "#call" do
     context "when app raises an exception" do
       it "rescues the exception, notifies Airbrake & re-raises it" do

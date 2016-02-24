@@ -77,6 +77,8 @@ if ENV['APPRAISAL_INITIALIZED']
 
     require 'sinatra'
     require 'apps/sinatra/dummy_app'
+    require 'apps/sinatra/composite_app/sinatra_app1'
+    require 'apps/sinatra/composite_app/sinatra_app2'
   rescue LoadError
     puts '** Skipped Sinatra specs'
   end
