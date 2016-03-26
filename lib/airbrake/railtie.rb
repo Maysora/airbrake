@@ -14,16 +14,16 @@ module Airbrake
 
       middleware = if defined?(ActionDispatch::DebugExceptions)
         # Rails >= 3.2.0
-        "ActionDispatch::DebugExceptions"
+        ::Rails::VERSION::MAJOR >= 5 ? ActionDispatch::DebugExceptions : "ActionDispatch::DebugExceptions"
       else
         # Rails < 3.2.0
         "ActionDispatch::ShowExceptions"
       end
 
       app.config.middleware.insert_after middleware,
-        "Airbrake::Rails::Middleware"
+        ::Rails::VERSION::MAJOR >= 5 ? Airbrake::Rails::Middleware : "Airbrake::Rails::Middleware"
 
-      app.config.middleware.insert 0, "Airbrake::UserInformer"
+      app.config.middleware.insert 0, ::Rails::VERSION::MAJOR >= 5 ? Airbrake::UserInformer : "Airbrake::UserInformer"
     end
 
     config.after_initialize do
